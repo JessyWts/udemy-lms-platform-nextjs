@@ -2,6 +2,16 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+create a signin page with [Clerk](https://dashboard.clerk.com/)
+att root folder create .env
+
+```bash
+nano .env
+
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_xxxxxxxxxxxxxxxxx
+CLERK_SECRET_KEY=sk_test_xxxxxxxxxxxxxxxxxxx
+```
+
 First, run the development server:
 
 ```bash
