@@ -95,4 +95,14 @@ npx prisma migrate diff --from-empty --to-schema-datasource prisma/schema.prisma
 npx prisma migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script > prisma/migrations/00_init/migration_up.sql
 ```
 
+List prisma models at => http://localhost:5555/
+
+```bash
+npx prisma studio
+```
+
+Exemple migration down
+
+```bash
 npx prisma migrate diff --from-schema-datamodel prisma/schema.prisma --to-empty --script > prisma/migrations/00_init/migration_down.sql
+```
