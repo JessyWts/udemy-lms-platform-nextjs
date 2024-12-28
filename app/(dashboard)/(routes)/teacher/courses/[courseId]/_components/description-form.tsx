@@ -45,7 +45,7 @@ export const DescriptionForm = ({
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            description: initialData.description || "",
+            description: initialData?.description || "",
         },
     });
 
