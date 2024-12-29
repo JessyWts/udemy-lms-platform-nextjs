@@ -45,13 +45,50 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
+### Makefile
+
+start_postgres
+
+```bash
+make start_postgres
+```
+
+stop_postgres
+
+```bash
+make stop_postgres
+```
+
+Prisma studio
+
+```bash
+make prismastudio
+```
+
+db_generate
+
+```bash
+make db_generate
+```
+
+db_push
+
+```bash
+make db_push
+```
+
+migratereset
+
+```bash
+make migratereset
+```
+
 ### Prisma setup
 
 Install Prisma
 
 ```bash
 npm install -D prisma
-
 ```
 
 Init prisma
@@ -78,7 +115,8 @@ To apply your Prisma schema changes to your database, use the prisma migrate dev
 npx prisma migrate dev --name "tags-model"
 ```
 
-Reset
+Reset Database delete all datas and tables and execute
+migration/init if you have one
 
 ```bash
 npx prisma migrate reset
@@ -87,7 +125,6 @@ npx prisma migrate reset
 [Migrate diff](https://fig.io/manual/prisma/migrate/diff)
 
 ```bash
-
 npx prisma migrate diff --from-empty --to-schema-datasource prisma/schema.prisma --script > prisma/migrations/00_init/migration_down.sql
 ```
 
@@ -95,7 +132,7 @@ npx prisma migrate diff --from-empty --to-schema-datasource prisma/schema.prisma
 npx prisma migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script > prisma/migrations/00_init/migration_up.sql
 ```
 
-List prisma models at => http://localhost:5555/
+List prisma models and datas at => http://localhost:5555/
 
 ```bash
 npx prisma studio
