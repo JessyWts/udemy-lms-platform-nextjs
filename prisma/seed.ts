@@ -1,50 +1,88 @@
 // Init DB first use or after reset
+import { auth } from "@clerk/nextjs/server";
+import { Category, Course, PrismaClient } from "@prisma/client";
+import { v4 as uuidv4 } from "uuid";
 
-import { db } from "@/lib/db";
-import { Category, Course } from "@prisma/client";
+const database = new PrismaClient();
+const { userId } = await auth();
+
+if (!userId) {
+  console.log("No userId found. start to sign-in to clerk");
+  throw new Error("Unauthorized");
+}
 
 const categoriesMock: Category[] = [
   {
-    id: "1",
+    id: uuidv4(),
     name: "Development",
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    id: "2",
+    id: uuidv4(),
     name: "Web Development",
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    id: "3",
+    id: uuidv4(),
     name: "Mobile Development",
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    id: "4",
+    id: uuidv4(),
     name: "Game Development",
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    id: "5",
+    id: uuidv4(),
     name: "Data Science",
     createdAt: new Date(),
     updatedAt: new Date(),
   },
 ];
 
-const coursesMock: Course[] = [];
+const coursesMock: Course[] = [
+  {
+    id: uuidv4(),
+    userId: userId,
+    title: "Building Modern Web Applications with Go (Golang)",
+    description:
+      "Learn to write modern, fast, and secure web applications in Google's Go programming language, and learn it from an award winning University professor with 20 years of teaching experience, and 20 years of experience working in the industry as an entrepreneur.",
+    imageUrl:
+      "https://utfs.io/f/SuOCtRNWjpTcSzqI3zNWjpTcqYFL87HI6AwGukVoOQKnZmlX",
+    price: 39.9,
+    isPublished: false,
+    categoryId: categoriesMock[1].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: uuidv4(),
+    userId: userId,
+    title:
+      "Coder Netflix en apprenant à utiliser les API REST dans vos applications Flutter et Dart",
+    description:
+      "Bienvenue dans la formation complète sur comment utiliser les API REST dans vos applications Flutter et Dart.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1731331131233-4f73c93ae693?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    price: 19.9,
+    isPublished: false,
+    categoryId: categoriesMock[2].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+];
 
 const createCategory = async (categories: Category[]) =>
-  await db.category.createMany({
+  await database.category.createMany({
     data: categories,
   });
 
 const createCourse = async (courses: Course[]) =>
-  await db.course.createMany({
+  await database.course.createMany({
     data: courses,
   });
 
@@ -52,19 +90,20 @@ const main = async () => {
   await createCategory(categoriesMock);
   await createCourse(coursesMock);
 
-  const courses = await db.course.findMany();
-  const categories = await db.category.findMany();
-
-  console.log(courses);
-  console.log(categories);
+  await database.category.findMany();
+  await database.course.findMany();
 };
 
 main()
   .then(async () => {
-    await db.$disconnect();
+    console.log("Success: seeding the database");
+    await database.$disconnect();
   })
   .catch(async (e) => {
-    console.error(e);
-    await db.$disconnect();
+    console.error("Error: seeding the database", e);
+    await database.$disconnect();
     process.exit(1);
+  })
+  .finally(async () => {
+    await database.$disconnect();
   });
