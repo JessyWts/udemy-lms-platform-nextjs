@@ -1,5 +1,11 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Required
+
+- Node.js version "^18.18.0 || ^19.8.0 || >= 20.0.0" is required.
+- Docker
+- Prisma
+
 ## Getting Started
 
 create a signin page with [Clerk](https://dashboard.clerk.com/)
@@ -45,25 +51,58 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
-### Prisma setup
+### Makefile
 
-Install Prisma
+start_postgres
+
+```bash
+make start_postgres
+```
+
+stop_postgres
+
+```bash
+make stop_postgres
+```
+
+Prisma studio
+
+```bash
+make prismastudio
+```
+
+db_generate
+
+```bash
+make db_generate
+```
+
+db_push
+
+```bash
+make db_push
+```
+
+migratereset
+
+```bash
+make migratereset
+```
+
+### Prisma Setup
+
+**Install Prisma & prisma client**
 
 ```bash
 npm install -D prisma
 
+npm i @prisma/client
 ```
 
-Init prisma
+Init prisma folder
 
 ```bash
 npx prisma init
-```
-
-Install prisma client
-
-```bash
-npm i @prisma/client
 ```
 
 This command reads your Prisma schema and generates your Prisma Client library
@@ -72,36 +111,68 @@ This command reads your Prisma schema and generates your Prisma Client library
 npx prisma generate
 ```
 
-To apply your Prisma schema changes to your database, use the prisma migrate dev CLI command
-
-```bash
-npx prisma migrate dev --name "tags-model"
-```
-
-Reset
-
-```bash
-npx prisma migrate reset
-```
-
-[Migrate diff](https://fig.io/manual/prisma/migrate/diff)
-
-```bash
-
-npx prisma migrate diff --from-empty --to-schema-datasource prisma/schema.prisma --script > prisma/migrations/00_init/migration_down.sql
-```
-
-```bash
-npx prisma migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script > prisma/migrations/00_init/migration_up.sql
-```
-
-List prisma models at => http://localhost:5555/
+List prisma models and datas at => http://localhost:5555/
 
 ```bash
 npx prisma studio
 ```
 
-Exemple migration down
+**Prisma DB interactions**
+
+Apply prisma/schema.prisma to database
+
+```bash
+npx prisma db push
+```
+
+Update prisma/schema.prisma from database
+
+```bash
+npx prisma db pull
+```
+
+**Prisma Migrate**
+
+To apply your Prisma schema changes to your database, use the prisma migrate dev CLI command
+
+```bash
+npx prisma migrate dev
+```
+
+The name of the migration. If no name is provided, the CLI will prompt you
+
+```bash
+npx prisma migrate dev --name "name of migration"
+```
+
+Skip triggering seed
+
+```bash
+npx prisma migrate dev --skip-seed"
+```
+
+Reset Database delete all datas and tables and execute
+migration/00_init/migration.sql if you have one
+
+```bash
+npx prisma migrate reset
+```
+
+**Prisma Migrate diff** => [Learn more](https://fig.io/manual/prisma/migrate/diff)
+
+Migration up empty schema model to completed schema model
+
+```bash
+npx prisma migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script > prisma/migrations/00_init/migration.sql
+```
+
+Migration up to update schema model from database to prisma/schema.prisma
+
+```bash
+npx prisma migrate diff --from-schema-datasource prisma/schema.prisma --to-schema-datamodel prisma/schema.prisma --script > prisma/migrations/db_update/migration.sql
+```
+
+Migration down - Init - Compare le(s) schema(s) présent dans le fichier prisma/schema.prisma à un schema vide pour créer prisma/migrations/00_init/migration_down.sql
 
 ```bash
 npx prisma migrate diff --from-schema-datamodel prisma/schema.prisma --to-empty --script > prisma/migrations/00_init/migration_down.sql
