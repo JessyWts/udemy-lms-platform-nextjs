@@ -139,10 +139,20 @@ To apply your Prisma schema changes to your database, use the prisma migrate dev
 npx prisma migrate dev
 ```
 
-The name of the migration. If no name is provided, the CLI will prompt you
+This command did three things:
+
+It created a new SQL migration file for this migration in the prisma/migrations directory.
+It executed the SQL migration file against the database.
+It ran prisma generate under the hood (which installed the @prisma/client package and generated a tailored Prisma Client API based on your models).
 
 ```bash
 npx prisma migrate dev --name "name of migration"
+```
+
+create only the migration up change not apply to db
+
+```bash
+npx prisma migrate dev --name add_chapter --create-only
 ```
 
 Skip triggering seed
@@ -176,4 +186,10 @@ Migration down - Init - Compare le(s) schema(s) présent dans le fichier prisma/
 
 ```bash
 npx prisma migrate diff --from-schema-datamodel prisma/schema.prisma --to-empty --script > prisma/migrations/00_init/migration_down.sql
+```
+
+Exemple Down
+
+```bash
+npx prisma migrate diff --from-schema-datamodel prisma/schema.prisma --to-schema-datasource prisma/schema.prisma --script > prisma/migrations/01_add_chapter/migration_down.sql
 ```
