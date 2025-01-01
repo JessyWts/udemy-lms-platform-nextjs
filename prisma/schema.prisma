@@ -21,7 +21,7 @@ enum Role {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String    @id @default(uuid())
   name          String?
   email         String    @unique
   emailVerified DateTime?
@@ -84,7 +84,7 @@ model Attachment {
 }
 
 model Chapter {
-  id          String   @id @default(cuid())
+  id          String   @id @default(uuid())
   title       String
   description String?  @db.Text
   videoUrl    String?  @db.Text
@@ -116,7 +116,7 @@ model MuxData {
 }
 
 model UserProgress {
-  id String @id @default(cuid())
+  id String @id @default(uuid())
 
   isCompleted Boolean  @default(false)
   createdAt   DateTime @default(now())
@@ -133,7 +133,7 @@ model UserProgress {
 }
 
 model Purchase {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -147,7 +147,7 @@ model Purchase {
 }
 
 model StripeCustomer {
-  id               String   @id @default(cuid())
+  id               String   @id @default(uuid())
   stripeCustomerId String   @unique
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
@@ -157,7 +157,7 @@ model StripeCustomer {
 }
 
 model Account {
-  id                String  @id @default(cuid())
+  id                String  @id @default(uuid())
   userId            String
   type              String
   provider          String

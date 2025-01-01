@@ -18,7 +18,7 @@ import { Loader2, Pencil } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { Course } from '@prisma/client';
+import { Chapter } from '@prisma/client';
 
 const formSchema = z.object({
     title: z.string().min(1, {
@@ -28,17 +28,19 @@ const formSchema = z.object({
     })
 });
 
-interface TitleFormProps {
+interface ChapterTitleFormProps {
     initialData : {
-        title: Course["title"];
+        title: Chapter["title"]
     };
     courseId: string;
+    chapterId: string;
 }
 
-export const TitleForm = ({
+export const ChapterTitleForm = ({
     initialData,
-    courseId
-}: TitleFormProps) => {
+    courseId,
+    chapterId
+}: ChapterTitleFormProps) => {
     const router = useRouter();
     const [isEditing, setIsEditing] = useState(false);
     const toggleEdit = () => setIsEditing((current) => !current)
@@ -52,19 +54,19 @@ export const TitleForm = ({
     
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
-            await axios.patch(`/api/courses/${courseId}`, values);
+            await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, values);
             toggleEdit();
-            toast.success("Course title updated");
+            toast.success("Chapter title updated");
             router.refresh();
         } catch {
-            toast.error("Failed to update course title");
+            toast.error("Failed to update chapter title");
         }
     }
 
     return (
         <div className='mt-6 border bg-slate-100 rounded-md p-4'>
             <div className='font-medium flex items-center justify-between'>
-                Course title
+                Chapter title
                 <Button onClick={toggleEdit} variant="ghost">
                     {isEditing ? (
                         <>Cancel</>
@@ -96,7 +98,7 @@ export const TitleForm = ({
                                             <Input 
                                                 {...field}
                                                 disabled={isSubmitting}
-                                                placeholder="e.g. Introduction to React"
+                                                placeholder="e.g. Introduction to the chapter"
                                             />
                                         </FormControl>
                                         <FormMessage />

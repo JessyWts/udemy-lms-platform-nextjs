@@ -13,8 +13,9 @@ export async function POST(req: NextRequest) {
 
     const course = await db.course.create({
       data: {
-        userId,
-        title,
+        userId: userId,
+        title: title,
+        teacherId: userId,
       },
     });
 

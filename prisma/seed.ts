@@ -1,10 +1,9 @@
 // Init DB first use or after reset
-import { auth } from "@clerk/nextjs/server";
-import { Category, Course, PrismaClient } from "@prisma/client";
+import { Category, Course, PrismaClient, Role, User } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 
 const database = new PrismaClient();
-const { userId } = await auth();
+const userId = uuidv4();
 
 if (!userId) {
   console.log("No userId found. start to sign-in to clerk");
@@ -44,6 +43,57 @@ const categoriesMock: Category[] = [
   },
 ];
 
+const usersMock: User[] = [
+  {
+    id: uuidv4(),
+    name: "Admin",
+    email: "admin@mail.com",
+    emailVerified: null,
+    image: null,
+    role: Role.ADMIN,
+  },
+  {
+    id: uuidv4(),
+    name: "Test_User_1",
+    email: "user1@gmail.com",
+    emailVerified: null,
+    image: null,
+    role: Role.USER,
+  },
+  {
+    id: uuidv4(),
+    name: "Test_User_2",
+    email: "user2@gmail.com",
+    emailVerified: null,
+    image: null,
+    role: Role.USER,
+  },
+  {
+    id: uuidv4(),
+    name: "Teacher Robert",
+    email: "teacher1@gmail.com",
+    emailVerified: null,
+    image: null,
+    role: Role.TEACHER,
+  },
+  {
+    id: uuidv4(),
+    name: "Teacher Robert",
+    email: "teacher2@gmail.com",
+    emailVerified: null,
+    image: null,
+    role: Role.TEACHER,
+  },
+  {
+    id: uuidv4(),
+    name: "Jamz",
+    email: "jamz@mail.com",
+    emailVerified: null,
+    image: null,
+    role: Role.TEACHER,
+  },
+];
+
 const coursesMock: Course[] = [
   {
     id: uuidv4(),
@@ -58,6 +108,7 @@ const coursesMock: Course[] = [
     categoryId: categoriesMock[1].id,
     createdAt: new Date(),
     updatedAt: new Date(),
+    teacherId: usersMock[4].id,
   },
   {
     id: uuidv4(),
@@ -73,25 +124,43 @@ const coursesMock: Course[] = [
     categoryId: categoriesMock[2].id,
     createdAt: new Date(),
     updatedAt: new Date(),
+    teacherId: usersMock[4].id,
+  },
+  {
+    id: uuidv4(),
+    userId: usersMock[4].id,
+    title:
+      "Doublon de Coder Netflix en apprenant à utiliser les API REST dans vos applications Flutter et Dart",
+    description:
+      "Bienvenue dans la formation complète sur comment utiliser les API REST dans vos applications Flutter et Dart.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1731331131233-4f73c93ae693?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    price: 19.9,
+    isPublished: false,
+    categoryId: categoriesMock[2].id,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    teacherId: usersMock[4].id,
   },
 ];
 
-const createCategory = async (categories: Category[]) =>
-  await database.category.createMany({
-    data: categories,
-  });
-
-const createCourse = async (courses: Course[]) =>
-  await database.course.createMany({
-    data: courses,
-  });
-
 const main = async () => {
-  await createCategory(categoriesMock);
-  await createCourse(coursesMock);
+  try {
+    await database.user.createMany({
+      data: usersMock,
+    });
 
-  await database.category.findMany();
-  await database.course.findMany();
+    await database.category.createMany({
+      data: categoriesMock,
+    });
+
+    await database.course.createMany({
+      data: coursesMock,
+    });
+  } catch (error) {
+    console.error(error);
+    throw new Error("Error seeding the database");
+  }
 };
 
 main()
