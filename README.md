@@ -4,11 +4,14 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 - Node.js version "^18.18.0 || ^19.8.0 || >= 20.0.0" is required.
 - Docker
-- Prisma
+- Clerk account [Clerk](https://dashboard.clerk.com/)
+- Prisma [docs](https://www.prisma.io/docs/getting-started)
+- Uploadthing account https://uploadthing.com/
+- Mux account https://www.mux.com - [Mux Api Doc](https://docs.mux.com/)
 
 ## Getting Started
 
-create a signin page with [Clerk](https://dashboard.clerk.com/)
+Create .env file
 att root folder create .env
 
 ```bash
@@ -16,6 +19,20 @@ nano .env
 
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_xxxxxxxxxxxxxxxxx
 CLERK_SECRET_KEY=sk_test_xxxxxxxxxxxxxxxxxxx
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+
+DATABASE_URL="postgresql://root:secret@localhost:5432/udemy_clone?sslmode=disable"
+DATABASE_NAME=udemy_clone
+DATABASE_USER=root
+DATABASE_PASSWORD=secret
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+
+UPLOADTHING_TOKEN='xxxxxxxxxxxxxxxxx'
+
+MUX_TOKEN_ID=xxxxxxxxxxxxxxxxx
+MUX_TOKEN_SECRET=xxxxxxxxxxxxxxxxx
 ```
 
 First, run the development server:
