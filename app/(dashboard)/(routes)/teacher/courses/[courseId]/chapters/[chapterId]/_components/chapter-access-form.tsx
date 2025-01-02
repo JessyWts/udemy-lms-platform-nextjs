@@ -8,79 +8,87 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { useForm } from 'react-hook-form';
 import { Loader2, Pencil } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { Course } from '@prisma/client';
+import { cn } from '@/lib/utils';
+import { Chapter } from '@prisma/client';
+import { Switch } from '@/components/ui/switch';
 
 const formSchema = z.object({
-    title: z.string().min(1, {
-        message: "Title is required",
-    }).min(3, {
-        message: "Title must be at least 3 characters long",
-    })
+    isFree: z.boolean().default(false),
 });
 
-interface TitleFormProps {
+interface ChapterAccessFormProps {
     initialData : {
-        title: Course["title"];
+        isFree: Chapter["isFree"];
     };
     courseId: string;
+    chapterId: string;
 }
 
-export const TitleForm = ({
+export const ChapterAccessForm = ({
     initialData,
-    courseId
-}: TitleFormProps) => {
+    courseId,
+    chapterId
+}: ChapterAccessFormProps) => {
     const router = useRouter();
     const [isEditing, setIsEditing] = useState(false);
     const toggleEdit = () => setIsEditing((current) => !current)
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: initialData,
+        defaultValues: {
+            isFree: !!initialData.isFree,
+        },
     });
 
     const {isSubmitting, isValid} = form.formState;
     
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
-            await axios.patch(`/api/courses/${courseId}`, values);
+            await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, values);
             toggleEdit();
-            toast.success("Course title updated");
+            toast.success("Chapter preview updated");
             router.refresh();
         } catch {
-            toast.error("Failed to update course title");
+            toast.error("Failed to update chapter preview");
         }
     }
 
     return (
         <div className='mt-6 border bg-slate-100 rounded-md p-4'>
             <div className='font-medium flex items-center justify-between'>
-                Course title
+                Chapter access
                 <Button onClick={toggleEdit} variant="ghost">
                     {isEditing ? (
                         <>Cancel</>
                     ) : (
                         <>
                             <Pencil className='h-4 w-4 mr-2'/>
-                            Edit title
+                            Edit access
                         </>
                     )}
                 </Button>
             </div>
             {
                 !isEditing && (
-                    <p className='mt-2 text-sm'>
-                        {initialData.title}
-                    </p>
+                    <div className={cn(
+                        "text-sm mt-2",
+                        !initialData.isFree && "text-slate-500 italic"
+                    )}>
+                        {initialData.isFree
+                            ? <>This chapter is free for preview</>
+                            :<> This chapter is not free for preview</>
+                        }
+                    </div>
                 )
             }
             {
@@ -89,16 +97,21 @@ export const TitleForm = ({
                         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4 mt-4'>
                         <FormField 
                                 control={form.control}
-                                name='title'    
+                                name='isFree'    
                                 render={({ field }) => (
-                                    <FormItem>
+                                    <FormItem className='flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4'>
                                         <FormControl>
-                                            <Input 
-                                                {...field}
+                                            <Switch
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
                                                 disabled={isSubmitting}
-                                                placeholder="e.g. Introduction to React"
                                             />
                                         </FormControl>
+                                        <div className='space-y-1 leading-none'>
+                                            <FormDescription>
+                                                Check this box if you want to make this chapter free for preview
+                                            </FormDescription>
+                                        </div>
                                         <FormMessage />
                                     </FormItem>
                                 )}
