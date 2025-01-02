@@ -66,8 +66,8 @@ export const ChaptersList = ({items, onEdit, onReorder} : ChaptersListProps) => 
                                 {(provided) => (
                                     <div 
                                         className={cn(
-                                            "flex items-center gap-x-2 bg-slate-200 border-slate-200 text-slate-700 rounded-md mb-4 text-sm",
-                                            chapter.isPublished && "bg-sky100 border-sky200 text-sky700"
+                                            "flex items-center gap-x-2 bg-slate-200 border border-slate-200 border-popover bg-popover text-slate-700 rounded-md mb-4 text-sm",
+                                            chapter.isPublished && "bg-sky-100 border-sky-200 text-sky700"
                                         )}
                                         ref={provided.innerRef}
                                         {...provided.draggableProps}
