@@ -9,7 +9,7 @@ import { ChapterDescriptionForm } from "./_components/chapter-description-form";
 import { ChapterAccessForm } from "./_components/chapter-access-form";
 import { ChapterVideoForm } from "./_components/chapter-video-form";
 import { Banner } from "@/components/banner";
-import ChapterActions from "./_components/chapter-actions";
+import {ChapterActions} from "./_components/chapter-actions";
 
 const ChapterIdPage = async({params} : {params: {courseId: string, chapterId: string}}) => {
     const {userId} = await auth();
@@ -25,7 +25,7 @@ const ChapterIdPage = async({params} : {params: {courseId: string, chapterId: st
             courseId: courseId,
         },
         include: {
-            MuxData: true,
+            muxData: true,
         }
     
     });
