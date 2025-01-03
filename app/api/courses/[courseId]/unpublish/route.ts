@@ -4,11 +4,11 @@ import { db } from "@/lib/db";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { courseId: string; chapterId: string } }
+  { params }: { params: { courseId: string } }
 ) {
   try {
     const { userId } = await auth();
-    const { courseId, chapterId } = await params;
+    const { courseId } = await params;
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -25,37 +25,30 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const unPublishedChapter = await db.chapter.update({
+    const course = await db.course.findUnique({
       where: {
-        id: chapterId,
-        courseId: courseId,
+        id: courseId,
+        userId: userId,
+      },
+    });
+
+    if (!course) {
+      return new NextResponse("Not found", { status: 404 });
+    }
+
+    const unpublishedCourse = await db.course.update({
+      where: {
+        id: courseId,
+        userId: userId,
       },
       data: {
         isPublished: false,
       },
     });
 
-    const publishedChapterInCourse = await db.chapter.findMany({
-      where: {
-        id: chapterId,
-        isPublished: true,
-      },
-    });
-
-    if (!publishedChapterInCourse.length) {
-      await db.course.update({
-        where: {
-          id: courseId,
-        },
-        data: {
-          isPublished: false,
-        },
-      });
-    }
-
-    return NextResponse.json(unPublishedChapter);
+    return NextResponse.json(unpublishedCourse);
   } catch (error) {
-    console.log("[CHAPTER_ID_UNPUBLISH]", error);
+    console.log("[COURSE_ID_UNPUBLISH]", error);
     return new NextResponse("Internal Error", { status: 500 });
   }
 }

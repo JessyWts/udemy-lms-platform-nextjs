@@ -2,6 +2,8 @@ import Mux from "@mux/mux-node";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { utapi } from "@/app/api/uploadthing/route";
+import { mediaKeyFromUrl } from "@/lib/utils";
 
 const clientMux = new Mux({
   tokenId: process.env.MUX_TOKEN_ID!,
@@ -56,6 +58,9 @@ export async function PATCH(
             id: existingMuxData.id,
           },
         });
+
+        const key = mediaKeyFromUrl(values.videoUrl);
+        await utapi.deleteFiles(key);
       }
 
       const asset = await clientMux.video.assets.create({
@@ -128,6 +133,9 @@ export async function DELETE(
             id: isExistingMuxData.id,
           },
         });
+
+        const key = mediaKeyFromUrl(chapter.videoUrl);
+        await utapi.deleteFiles(key);
       }
     }
 
