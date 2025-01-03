@@ -1,6 +1,7 @@
 // Init DB first use or after reset
 import { Category, Course, PrismaClient, Role, User } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
+import { categoriesMock as categoryList } from "./seed-categories";
 
 const database = new PrismaClient();
 const userId = uuidv4();
@@ -9,39 +10,6 @@ if (!userId) {
   console.log("No userId found. start to sign-in to clerk");
   throw new Error("Unauthorized");
 }
-
-const categoriesMock: Category[] = [
-  {
-    id: uuidv4(),
-    name: "Development",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: uuidv4(),
-    name: "Web Development",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: uuidv4(),
-    name: "Mobile Development",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: uuidv4(),
-    name: "Game Development",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: uuidv4(),
-    name: "Data Science",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-];
 
 const usersMock: User[] = [
   {
@@ -93,6 +61,7 @@ const usersMock: User[] = [
     role: Role.TEACHER,
   },
 ];
+const categoriesMock: Category[] = categoryList as Category[];
 
 const coursesMock: Course[] = [
   {
