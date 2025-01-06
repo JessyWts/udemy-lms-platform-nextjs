@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearchPostgres"]
 }
 
 datasource db {
@@ -59,6 +60,7 @@ model Course {
 
   @@index([categoryId])
   @@index([teacherId])
+  @@index([title], name: "course_title_index")
 }
 
 model Category {
@@ -97,8 +99,8 @@ model Chapter {
   courseId String
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
-  muxData     MuxData?
-  useProgress UserProgress[]
+  muxData      MuxData?
+  userProgress UserProgress[]
 
   @@index([courseId])
 }
