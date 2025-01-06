@@ -59,6 +59,8 @@ export const ChaptersForm = ({
             router.refresh();
         } catch {
             toast.error("Failed to create course chapter");
+        } finally {
+            form.reset();
         }
     }
 
