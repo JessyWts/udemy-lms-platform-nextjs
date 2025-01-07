@@ -14,11 +14,11 @@ interface ChaptersListProps {
 }
 
 export const ChaptersList = ({items, onEdit, onReorder} : ChaptersListProps) => {
-    const [isMonted, setIsMounted] = useState(false);
+    const [mounted, setMounted] = useState(false);
     const [chapters, setChapters ] = useState(items);
 
     useEffect(() => {
-        setIsMounted(true)
+        setMounted(true)
     }, []);
 
     useEffect(() => {
@@ -49,7 +49,7 @@ export const ChaptersList = ({items, onEdit, onReorder} : ChaptersListProps) => 
         onReorder(bulkUpdateData);
     }
 
-    if (!isMonted) {
+    if (!mounted) {
         return null;
     }
     return ( 
