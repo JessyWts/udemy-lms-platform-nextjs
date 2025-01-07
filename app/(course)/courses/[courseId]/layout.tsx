@@ -47,7 +47,6 @@ const CourseLayout = async ({children, params} : {
 
     const progressCount = await getProgress(userId, courseId);
 
-
     return (
         <div className="h-full">
             <div className='h-[80px] md:pl-80 w-full z-50 fixed'>
@@ -62,7 +61,7 @@ const CourseLayout = async ({children, params} : {
                     progressCount={progressCount}
                 />
             </div>
-            <main className="md:pl-80 pt-[80] h-full">
+            <main className="md:pl-80 pt-[80px] h-full">
                 {children}
             </main>
         </div>

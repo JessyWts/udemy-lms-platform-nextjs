@@ -1,15 +1,18 @@
 "use client"
 
+import { useEffect, useState } from 'react';
 import { z } from 'zod';
 import axios from "axios";
+
 import Muxplayer from '@mux/mux-player-react';
-import { Button } from "@/components/ui/button";
-import { Pencil, PlusCircle, VideoIcon } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import toast from 'react-hot-toast';
 import { Chapter, MuxData } from '@prisma/client';
+import toast from 'react-hot-toast';
+import { Loader2, Pencil, PlusCircle, VideoIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+
+import { Button } from "@/components/ui/button";
 import { Fileupload } from '@/components/file-upload';
+
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const formSchema = z.object({
@@ -29,6 +32,8 @@ export const ChapterVideoForm = ({
 }: ChapterVideoFormProps) => {
     const router = useRouter();
     const [isEditing, setIsEditing] = useState(false);
+    const [isClient, setIsClient] = useState(false);
+
     const toggleEdit = () => setIsEditing((current) => !current)
     
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -41,6 +46,9 @@ export const ChapterVideoForm = ({
             toast.error("Failed to update chapter videoUrl");
         }
     }
+    useEffect(() => {
+        setIsClient(true)
+      }, []);
 
     return (
         <div className='mt-6 border bg-slate-100 rounded-md p-4'>
@@ -70,12 +78,17 @@ export const ChapterVideoForm = ({
                         <div className='flex items-center justify-center h-60 bg-slate-200 rounded-md'>
                             <VideoIcon className='h-10 w-10 text-slate-500'/>
                         </div>
-                    ) : (
-                        <div className='relative aspect-video mt-2'>
-                            <Muxplayer 
+                    ) : ( isClient ? (
+                        <div className='flex relative aspect-video mt-2'>
+                            <Muxplayer
                                 playbackId={initialData?.muxData?.playbackId || ''}
                             />
                         </div>
+                        ) : (
+                            <div className='flex items-center justify-center h-60 '>
+                                <Loader2 className='animate-spin'/>
+                            </div>
+                        )
                     )
                 )
             }
