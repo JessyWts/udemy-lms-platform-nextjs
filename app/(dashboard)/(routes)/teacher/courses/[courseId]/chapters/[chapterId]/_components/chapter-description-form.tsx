@@ -20,6 +20,7 @@ import toast from 'react-hot-toast';
 import { cn } from '@/lib/utils';
 import { Chapter } from '@prisma/client';
 import Tiptap from '@/components/tiptap';
+import { Preview } from '@/components/preview';
 
 const formSchema = z.object({
     description: z.string().min(1, {
@@ -87,9 +88,7 @@ export const ChapterDescriptionForm = ({
                     )}>
                         {!initialData.description && "No description"}
                         {initialData.description && (
-                            <div dangerouslySetInnerHTML={{
-                                __html: initialData.description,
-                            }}/>
+                            <Preview value={initialData.description}/>
                         )}
                     </div>
                 )
