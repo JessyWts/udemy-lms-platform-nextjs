@@ -1,5 +1,6 @@
 "use client"
 
+import axios from "axios";
 import { useEffect, useState } from "react"
 import MuxPlayer from "@mux/mux-player-react"
 import { Loader2, Lock } from "lucide-react"
@@ -36,15 +37,20 @@ export const VideoPlayer = ({
     const onEnd = async() => {
         try {
             if (completeOnEnd) {
-                // await markChapterAsCompleted(chapterId, courseId, true)
+                await axios.put(`/api/courses/${courseId}/chapters/${chapterId}/progress`,{
+                    isCompleted: true
+                });
+                
                 if (!nextChapterId) {
-                    confetti.onOpen()
+                    confetti.onOpen();
                 }
+
+                toast.success('Progress updated');
+                router.refresh();
+
                 if (nextChapterId) {
                     router.push(`/courses/${courseId}/chapters/${nextChapterId}`)
                 }
-                toast.success('Progress updated')
-                router.refresh()
             }
         } catch {
             toast.error('An error occurred. Please try again later')
