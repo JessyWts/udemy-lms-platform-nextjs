@@ -8,6 +8,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 - Prisma [docs](https://www.prisma.io/docs/getting-started)
 - Uploadthing account https://uploadthing.com/
 - Mux account https://www.mux.com - [Mux Api Doc](https://docs.mux.com/)
+- Stripe account https://dashboard.stripe.com/
 
 ## Getting Started
 
@@ -21,6 +22,7 @@ NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_xxxxxxxxxxxxxxxxx
 CLERK_SECRET_KEY=sk_test_xxxxxxxxxxxxxxxxxxx
 NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
 NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_APP_URL=http://localhost:3000
 
 DATABASE_URL="postgresql://root:secret@localhost:5432/udemy_clone?sslmode=disable"
 DATABASE_NAME=udemy_clone
@@ -33,6 +35,9 @@ UPLOADTHING_TOKEN='xxxxxxxxxxxxxxxxx'
 
 MUX_TOKEN_ID=xxxxxxxxxxxxxxxxx
 MUX_TOKEN_SECRET=xxxxxxxxxxxxxxxxx
+
+STRIPE_API_KEY=sk_test_XXXXXXXXXXXXXXXXXxxxxxxxxxxxxxxxxx
+STRIPE_WEBHOOK_SECRET=whsec_xxxxxxxxxxxxxxxxxxxxxxx
 ```
 
 First, run the development server:
@@ -53,20 +58,7 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Setup & Commands
 
 ### Makefile
 
@@ -210,3 +202,59 @@ Exemple Down
 ```bash
 npx prisma migrate diff --from-schema-datamodel prisma/schema.prisma --to-schema-datasource prisma/schema.prisma --script > prisma/migrations/01_add_chapter/migration_down.sql
 ```
+
+### Stripe
+
+install [Stripe cli](https://stripe.com/docs/stripe-cli)
+
+```bash
+brew install stripe/stripe-cli/stripe
+```
+
+Login to stripe cli
+
+```bash
+stripe login
+```
+
+Transfer events to webhook
+test webhook with local endpoint
+after exec this command you will see
+
+> Ready! You are using Stripe API Version [2024-12-18.acacia]. Your webhook signing secret is whsec_xxxxxxxxxxxxxxxxxxxxxxx
+> copy whsec_xxxxxxxxxxxxxxxxxxxxxxx to the .env file
+
+STRIPE_WEBHOOK_SECRET=whsec_xxxxxxxxxxxxxxxxxxxxxxx
+
+```bash
+stripe listen --forward-to localhost:3000/api/webhook
+```
+
+Trigger events
+
+```bash
+stripe trigger payment_intent.succeeded
+# or
+stripe trigger subscription_schedule.canceled
+# or
+stripe trigger invoice.upcoming
+# or
+stripe trigger charge.captured
+# or
+stripe trigger invoice.payment_succeeded
+```
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
