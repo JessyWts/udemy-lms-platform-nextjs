@@ -1,6 +1,5 @@
 // Init DB first use or after reset
 import { PrismaClient } from "@prisma/client";
-import { v4 as uuidv4 } from "uuid";
 
 const database = new PrismaClient();
 
@@ -11,103 +10,86 @@ export const categoriesMock = [
     updatedAt: new Date(),
   },
   {
-    id: uuidv4(),
     name: "Web Development",
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    id: uuidv4(),
     name: "Mobile Development",
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    id: uuidv4(),
     name: "Game Development",
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    id: uuidv4(),
     name: "Data Science",
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    id: uuidv4(),
     name: "Engineering",
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    id: uuidv4(),
     name: "Film",
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    id: uuidv4(),
     name: "Sports",
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    id: uuidv4(),
     name: "Business & Finance",
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    id: uuidv4(),
     name: "Business",
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    id: uuidv4(),
     name: "Reading",
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    id: uuidv4(),
     name: "Photography",
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    id: uuidv4(),
     name: "Education",
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    id: uuidv4(),
     name: "Technology",
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    id: uuidv4(),
     name: "Science",
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    id: uuidv4(),
     name: "Health",
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    id: uuidv4(),
     name: "Art",
     createdAt: new Date(),
     updatedAt: new Date(),
   },
   {
-    id: uuidv4(),
     name: "Fashion",
     createdAt: new Date(),
     updatedAt: new Date(),
