@@ -1,4 +1,3 @@
-"use client";
 
 import React from 'react';
 import { cn } from '@/lib/utils'
@@ -21,7 +20,7 @@ const sizeByVariant = {
     sm: "text-xs"
 }
 
-export const CourseProgress = async({ variant, value, size } : Props) => {
+export const CourseProgress = ({ variant, value, size } : Props) => {
     return (
         <div>
             <Progress 
