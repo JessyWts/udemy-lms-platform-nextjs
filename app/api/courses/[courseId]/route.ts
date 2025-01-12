@@ -4,6 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { utapi } from "../../uploadthing/route";
 import { mediaKeyFromUrl } from "@/lib/utils";
+import { isTeacher } from "@/lib/teacher";
 
 const clientMux = new Mux({
   tokenId: process.env.MUX_TOKEN_ID!,
@@ -18,7 +19,7 @@ export async function DELETE(
     const { userId } = await auth();
     const { courseId } = await params;
 
-    if (!userId) {
+    if (!userId || !isTeacher(userId)) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
@@ -89,7 +90,7 @@ export async function PATCH(
     const values = await req.json();
     const { courseId } = await params;
 
-    if (!userId) {
+    if (!userId || !isTeacher(userId)) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
