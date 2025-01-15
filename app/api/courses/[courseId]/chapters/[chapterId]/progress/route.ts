@@ -3,9 +3,14 @@ import { isTeacher } from "@/lib/teacher";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
+type Params = Promise<{
+  courseId: string;
+  chapterId: string;
+}>;
+
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { courseId: string; chapterId: string } }
+  { params }: { params: Params }
 ) {
   try {
     const { userId } = await auth();
@@ -14,7 +19,7 @@ export async function PUT(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const { courseId, chapterId } = await params;
+    const { chapterId } = await params;
     const { isCompleted } = await request.json();
 
     const userProgress = await db.userProgress.upsert({

@@ -5,11 +5,11 @@ import { redirect } from "next/navigation";
 import { CourseSideBar } from "./_components/course-sidebar";
 import CourseNavbar from "./_components/course-navbar";
 
+type Params = Promise<{courseId: string}>;
+
 const CourseLayout = async ({children, params} : {
     children: React.ReactNode,
-    params: {
-        courseId: string
-    }
+    params: Params
 }) => {
     const {userId} = await auth();
     const {courseId} = await params;

@@ -3,10 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { isTeacher } from "@/lib/teacher";
 
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: { courseId: string } }
-) {
+type Params = Promise<{
+  courseId: string;
+}>;
+
+export async function PATCH(req: NextRequest, { params }: { params: Params }) {
   try {
     const { userId } = await auth();
     const { courseId } = await params;

@@ -203,6 +203,30 @@ Exemple Down
 npx prisma migrate diff --from-schema-datamodel prisma/schema.prisma --to-schema-datasource prisma/schema.prisma --script > prisma/migrations/01_add_chapter/migration_down.sql
 ```
 
+### Clerk
+
+Synch data to DB after signup
+[Overview](https://clerk.com/docs/webhooks/overview)
+[Sync Clerk data to your app with webhooks](https://clerk.com/docs/webhooks/sync-data)
+
+Install ngrok
+
+```bash
+brew install ngrok
+```
+
+Install in your project svix
+
+```bash
+npm install svix
+```
+
+Launch comand in terminal domain cleate on ngrok website
+
+```bash
+ngrok http --url=handy-amazingly-doe.ngrok-free.app 3000
+```
+
 ### Stripe
 
 install [Stripe cli](https://stripe.com/docs/stripe-cli)

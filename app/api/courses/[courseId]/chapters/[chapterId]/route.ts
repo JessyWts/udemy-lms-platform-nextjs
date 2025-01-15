@@ -1,8 +1,9 @@
 import Mux from "@mux/mux-node";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
+import { UTApi } from "uploadthing/server";
+
 import { db } from "@/lib/db";
-import { utapi } from "@/app/api/uploadthing/route";
 import { mediaKeyFromUrl } from "@/lib/utils";
 import { isTeacher } from "@/lib/teacher";
 
@@ -11,14 +12,18 @@ const clientMux = new Mux({
   tokenSecret: process.env.MUX_TOKEN_SECRET!,
 });
 
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: { courseId: string; chapterId: string } }
-) {
+const utapi = new UTApi();
+
+type Params = Promise<{
+  courseId: string;
+  chapterId: string;
+}>;
+
+export async function PATCH(req: NextRequest, { params }: { params: Params }) {
   try {
     const { userId } = await auth();
     const { courseId, chapterId } = await params;
-    const { isPublished, ...values } = await req.json();
+    const { ...values } = await req.json();
 
     if (!userId || !isTeacher(userId)) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -86,10 +91,7 @@ export async function PATCH(
   }
 }
 
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { courseId: string; chapterId: string } }
-) {
+export async function DELETE(req: NextRequest, { params }: { params: Params }) {
   try {
     const { userId } = await auth();
     const { courseId, chapterId } = await params;

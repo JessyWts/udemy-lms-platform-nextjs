@@ -11,11 +11,10 @@ import { Separator } from "@/components/ui/separator";
 import { Preview } from "@/components/preview";
 import { CourseProgressButton } from "./_components/course-progress-button";
 
+type Params = Promise<{courseId: string,chapterId: string}>;
+
 const ChapterIdPage = async({params}: {
-    params: {
-        courseId: string;
-        chapterId: string;
-    }
+    params: Params
 }) => {
     
     const { courseId, chapterId } = await params;

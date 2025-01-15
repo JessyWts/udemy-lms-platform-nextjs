@@ -4,9 +4,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { stripe } from "@/lib/stripe";
 
+type Params = Promise<{
+  courseId: string;
+}>;
+
 export async function POST(
   request: NextRequest,
-  { params }: { params: { courseId: string } }
+  { params }: { params: Params }
 ) {
   try {
     const user = await currentUser();

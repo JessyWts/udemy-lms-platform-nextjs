@@ -5,19 +5,18 @@ import { getCourses } from "@/actions/get-courses";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { CoursesList } from "@/components/courses-list";
+import { Suspense } from "react";
 
-interface SearchPageProps {
-    searchParams: {
-        title: string;
-        categoryId: string;
-    }
-}
+// type Params = Promise<{ categoryId: string }>
+type SearchParams = Promise<{ [key: string]: string }>
 
-const SearchPage = async({
-    searchParams
-} : SearchPageProps) => {
+const SearchPage = async(props: {
+    // params: Params,
+    searchParams: SearchParams
+} ) => {
     const {userId} = await auth();
-    const { title, categoryId } = await searchParams;
+    // const { categoryId } = await props.params;
+    const { title, categoryId } = await props.searchParams;
 
 
     if (!userId) {
@@ -39,7 +38,9 @@ const SearchPage = async({
     return (
         <>
             <div className='px-6 pt-6 md:hidden md:mb-0 block'>
-                <SearchInput />
+                <Suspense>
+                    <SearchInput />
+                </Suspense>
             </div>
             <div className='p-6 space-y-6'>
                 <Categories 
