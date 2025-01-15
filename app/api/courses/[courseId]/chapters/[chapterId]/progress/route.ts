@@ -14,7 +14,7 @@ export async function PUT(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const { courseId, chapterId } = await params;
+    const { chapterId } = await params;
     const { isCompleted } = await request.json();
 
     const userProgress = await db.userProgress.upsert({

@@ -1,85 +1,106 @@
-// Init DB first use or after reset
-import { Category, Course, PrismaClient, User } from "@prisma/client";
-import { v4 as uuidv4 } from "uuid";
-import { categoriesMock as categoryList } from "./seed-categories";
-import { usersMock as userList } from "./seed-users";
+import { Category, PrismaClient } from "@prisma/client";
 
 const database = new PrismaClient();
 
-const usersMock: User[] = userList as User[];
-
-const userId = "user_2q2TGR3VmMPLgGvjyluC61szsjk";
-
-if (!userId) {
-  console.log("No userId found. start to sign-in to clerk");
-  throw new Error("Unauthorized");
-}
-
-const categoriesMock: Category[] = categoryList as Category[];
-
-const coursesMock: Course[] = [
+const categoriesMock = [
   {
-    id: uuidv4(),
-    userId: userId,
-    title: "Building Modern Web Applications with Go (Golang)",
-    description:
-      "Learn to write modern, fast, and secure web applications in Google's Go programming language, and learn it from an award winning University professor with 20 years of teaching experience, and 20 years of experience working in the industry as an entrepreneur.",
-    imageUrl:
-      "https://utfs.io/f/SuOCtRNWjpTcSzqI3zNWjpTcqYFL87HI6AwGukVoOQKnZmlX",
-    price: 39.9,
-    isPublished: false,
-    categoryId: "5a4cbe98-9a42-4999-bc21-2df40c20862f",
+    name: "Music",
     createdAt: new Date(),
     updatedAt: new Date(),
-    teacherId: userId,
   },
   {
-    id: uuidv4(),
-    userId: userId,
-    title:
-      "Coder Netflix en apprenant à utiliser les API REST dans vos applications Flutter et Dart",
-    description:
-      "Bienvenue dans la formation complète sur comment utiliser les API REST dans vos applications Flutter et Dart.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1731331131233-4f73c93ae693?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    price: 19.9,
-    isPublished: false,
-    categoryId: "5a4cbe98-9a42-4999-bc21-2df40c20862f",
+    name: "Web Development",
     createdAt: new Date(),
     updatedAt: new Date(),
-    teacherId: userId,
   },
   {
-    id: uuidv4(),
-    userId: userId,
-    title:
-      "Doublon de Coder Netflix en apprenant à utiliser les API REST dans vos applications Flutter et Dart",
-    description:
-      "Bienvenue dans la formation complète sur comment utiliser les API REST dans vos applications Flutter et Dart.",
-    imageUrl:
-      "https://images.unsplash.com/photo-1731331131233-4f73c93ae693?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    price: 19.9,
-    isPublished: false,
-    categoryId: "ab73c06a-fb63-47aa-9491-532b4b6c6418",
+    name: "Mobile Development",
     createdAt: new Date(),
     updatedAt: new Date(),
-    teacherId: userId,
+  },
+  {
+    name: "Game Development",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "Data Science",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "Engineering",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "Film",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "Sports",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "Business & Finance",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "Business",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "Reading",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "Photography",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "Education",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "Technology",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "Science",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "Health",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "Art",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    name: "Fashion",
+    createdAt: new Date(),
+    updatedAt: new Date(),
   },
 ];
 
 const main = async () => {
   try {
-    await database.user.createMany({
-      data: usersMock,
+    const categoryList = await database.category.createMany({
+      data: categoriesMock as Category[],
     });
-
-    await database.category.createMany({
-      data: categoriesMock,
-    });
-
-    await database.course.createMany({
-      data: coursesMock,
-    });
+    console.log(categoryList.count, "categories created");
   } catch (error) {
     console.error(error);
     throw new Error("Error seeding the database");
