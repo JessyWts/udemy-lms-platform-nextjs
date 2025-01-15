@@ -3,10 +3,12 @@ import { isTeacher } from "@/lib/teacher";
 import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { courseId: string; attachmentId: string } }
-) {
+type Params = Promise<{
+  courseId: string;
+  attachmentId: string;
+}>;
+
+export async function DELETE(req: NextRequest, { params }: { params: Params }) {
   try {
     const { userId } = await auth();
     const { courseId, attachmentId } = await params;

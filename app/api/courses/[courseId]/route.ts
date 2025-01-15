@@ -1,20 +1,24 @@
 import Mux from "@mux/mux-node";
-import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
+import { UTApi } from "uploadthing/server";
 import { NextRequest, NextResponse } from "next/server";
-import { utapi } from "../../uploadthing/route";
-import { mediaKeyFromUrl } from "@/lib/utils";
+
+import { db } from "@/lib/db";
 import { isTeacher } from "@/lib/teacher";
+import { mediaKeyFromUrl } from "@/lib/utils";
 
 const clientMux = new Mux({
   tokenId: process.env.MUX_TOKEN_ID!,
   tokenSecret: process.env.MUX_TOKEN_SECRET!,
 });
 
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { courseId: string } }
-) {
+const utapi = new UTApi();
+
+type Params = Promise<{
+  courseId: string;
+}>;
+
+export async function DELETE(req: NextRequest, { params }: { params: Params }) {
   try {
     const { userId } = await auth();
     const { courseId } = await params;
@@ -81,10 +85,7 @@ export async function DELETE(
   }
 }
 
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: { courseId: string } }
-) {
+export async function PATCH(req: NextRequest, { params }: { params: Params }) {
   try {
     const { userId } = await auth();
     const values = await req.json();
