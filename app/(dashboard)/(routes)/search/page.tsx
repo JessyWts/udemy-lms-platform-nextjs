@@ -5,23 +5,20 @@ import { getCourses } from "@/actions/get-courses";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { CoursesList } from "@/components/courses-list";
-import { Suspense } from "react";
+import { Suspense} from "react";
 
-// type Params = Promise<{ categoryId: string }>
 type SearchParams = Promise<{ [key: string]: string }>
 
 const SearchPage = async(props: {
-    // params: Params,
     searchParams: SearchParams
 } ) => {
     const {userId} = await auth();
-    // const { categoryId } = await props.params;
-    const { title, categoryId } = await props.searchParams;
-
 
     if (!userId) {
         return redirect('/');
     }
+
+    const { title, categoryId } = await props.searchParams;
 
     const categories = await db.category.findMany({
         orderBy: {

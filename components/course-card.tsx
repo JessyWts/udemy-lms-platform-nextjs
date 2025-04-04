@@ -23,12 +23,13 @@ export const CourseCard = ({ id, title, imageUrl, chaptersLength, price, progres
             <div className="group hover:shadow-sm transition overflow-hidden border rounded-lg p-3 h-full">
                 <div className="relative w-full aspect-video  rounded-md">
                 <Image
-                            alt={title}
-                            className="object-cover w-full h-full"
-                            height="200"
-                            src={imageUrl}
-                            width="350"
-                        />
+                    alt={title}
+                    priority
+                    className="object-cover w-full h-full"
+                    height="200"
+                    src={imageUrl}
+                    width="350"
+                />
                 </div>
                 <div className="flx flex-col gap-2">
                     <div className="text-lg md:text-base font-medium group-hover:text-sky-700 transition line-clamp-2">
